@@ -1,5 +1,6 @@
 package com.jiang.tasks.service;
 
+import com.jiang.tasks.Constants;
 import com.jiang.tasks.domain.Task;
 import com.jiang.tasks.dto.Status;
 import com.jiang.tasks.dto.TaskCreateDto;
@@ -7,11 +8,8 @@ import com.jiang.tasks.dto.TaskQueryDto;
 import com.jiang.tasks.dto.TaskUpdateDto;
 import com.jiang.tasks.repository.TaskRepository;
 import com.jiang.tasks.repository.TaskRepositorySpec;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -39,7 +37,7 @@ public class TaskService {
         Task newTask = new Task();
         newTask.setStatus(Status.CREATED.getStatus());
         newTask.setTitle(taskCreateDto.getTitle());
-        newTask.setDueDate(taskCreateDto.getDueDate());
+        newTask.setDueDate(Constants.convertStringToDate(taskCreateDto.getDueDate()));
         return taskRepository.save(newTask);
     }
 
@@ -48,13 +46,13 @@ public class TaskService {
     }
 
     public Optional<Task> update(TaskUpdateDto newTask, Long id) {
-         return taskRepository.findById(id)
+        return taskRepository.findById(id)
                 .map(task -> {
                     if (newTask.getTitle() != null) {
                         task.setTitle(newTask.getTitle());
                     }
                     if (newTask.getDueDate() != null) {
-                        task.setDueDate(newTask.getDueDate());
+                        task.setDueDate(Constants.convertStringToDate(newTask.getDueDate()));
                     }
                     if (newTask.getStatus() != null) {
                         task.setStatus(newTask.getStatus().getStatus());
