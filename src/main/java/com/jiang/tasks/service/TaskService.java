@@ -10,6 +10,7 @@ import com.jiang.tasks.exceptions.TitleException;
 import com.jiang.tasks.repository.TaskRepository;
 import com.jiang.tasks.repository.TaskRepositorySpec;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -45,6 +46,7 @@ public class TaskService {
         return taskRepository.save(newTask);
     }
 
+    @Transactional
     public void deleteById(Long id) {
         taskRepository.deleteById(id);
     }
