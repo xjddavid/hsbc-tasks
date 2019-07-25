@@ -1,7 +1,6 @@
 package com.jiang.tasks.dto;
 
 import com.jiang.tasks.Constants;
-import com.jiang.tasks.exceptions.DateParseException;
 import com.jiang.tasks.exceptions.StatusException;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,11 +28,10 @@ public class TaskQueryDto {
             taskQueryDto.setTo(Constants.convertStringToDate(requestParams.get("to")));
         }
         if (requestParams.get("status") != null) {
-            try {
-                taskQueryDto.setStatus(Status.valueOf(requestParams.get("status")));
-            } catch (IllegalArgumentException ex) {
-                ex.printStackTrace();
+            if (!Status.contain(requestParams.get("status"))) {
                 throw new StatusException(requestParams.get("status"));
+            } else {
+                taskQueryDto.setStatus(Status.valueOf(requestParams.get("status")));
             }
         }
         return taskQueryDto;

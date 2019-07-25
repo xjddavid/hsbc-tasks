@@ -12,4 +12,12 @@ public enum Status {
     public String getStatus() {
         return this.status;
     }
+
+    static public boolean contain(String aName) {
+        Status[] statuses = Status.values();
+        for (Status status : statuses)
+            if (status.status.equals(aName))
+                return true;
+        return false;
+    }
 }
