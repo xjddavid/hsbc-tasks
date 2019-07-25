@@ -3,6 +3,7 @@ package com.jiang.tasks.controller;
 import com.jiang.tasks.TaskNotFoundException;
 import com.jiang.tasks.domain.Task;
 import com.jiang.tasks.dto.TaskCreateDto;
+import com.jiang.tasks.dto.TaskUpdateDto;
 import com.jiang.tasks.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -50,20 +51,10 @@ public class TaskController {
                 .orElseThrow(() -> new TaskNotFoundException(id));
     }
 
-//    @PutMapping("/tasks/{id}")
-//    Task replaceTask(@RequestBody Task newTask, @PathVariable Long id) {
-//        return taskRepository.findById(id)
-//                .map(task -> {
-//                    task.setTitle(newTask.getTitle());
-//                    task.setDueDate(newTask.getDueDate());
-//                    task.setStatus(newTask.getStatus());
-//                    return taskRepository.save(task);
-//                })
-//                .orElseGet(() -> {
-//                    newTask.setId(id);
-//                    return taskRepository.save(newTask);
-//                });
-//    }
+    @PutMapping("/tasks/{id}")
+    Task replaceTask(@RequestBody TaskUpdateDto newTask, @PathVariable Long id) {
+        return taskService.update(newTask, id).orElseThrow(() -> new TaskNotFoundException(id));
+    }
 
     @DeleteMapping("/tasks/{id}")
     void deleteTask(@PathVariable Long id) {

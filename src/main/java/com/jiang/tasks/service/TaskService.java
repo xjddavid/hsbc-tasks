@@ -3,6 +3,7 @@ package com.jiang.tasks.service;
 import com.jiang.tasks.domain.Task;
 import com.jiang.tasks.dto.Status;
 import com.jiang.tasks.dto.TaskCreateDto;
+import com.jiang.tasks.dto.TaskUpdateDto;
 import com.jiang.tasks.repository.TaskRepository;
 import com.jiang.tasks.repository.TaskRepositorySpec;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,5 +43,26 @@ public class TaskService {
 
     public void deleteById(Long id) {
         taskRepository.deleteById(id);
+    }
+
+    public Optional<Task> update(TaskUpdateDto newTask, Long id) {
+         return taskRepository.findById(id)
+                .map(task -> {
+                    if (newTask.getTitle() != null) {
+                        task.setTitle(newTask.getTitle());
+                    }
+                    if (newTask.getDueDate() != null) {
+                        try {
+                            task.setDueDate(new SimpleDateFormat("ddMMyyyy").parse(newTask.getDueDate()));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (newTask.getStatus() != null) {
+                        task.setStatus(newTask.getStatus().getStatus());
+                    }
+                    return Optional.of(taskRepository.save(task));
+                })
+                .orElse(null);
     }
 }
