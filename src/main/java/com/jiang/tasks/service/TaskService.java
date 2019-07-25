@@ -6,6 +6,7 @@ import com.jiang.tasks.dto.Status;
 import com.jiang.tasks.dto.TaskCreateDto;
 import com.jiang.tasks.dto.TaskQueryDto;
 import com.jiang.tasks.dto.TaskUpdateDto;
+import com.jiang.tasks.exceptions.TitleException;
 import com.jiang.tasks.repository.TaskRepository;
 import com.jiang.tasks.repository.TaskRepositorySpec;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,9 @@ public class TaskService {
     public Task save(TaskCreateDto taskCreateDto) {
         Task newTask = new Task();
         newTask.setStatus(Status.CREATED.getStatus());
+        if (taskCreateDto.getTitle().equals("")) {
+            throw new TitleException();
+        }
         newTask.setTitle(taskCreateDto.getTitle());
         newTask.setDueDate(Constants.convertStringToDate(taskCreateDto.getDueDate()));
         return taskRepository.save(newTask);

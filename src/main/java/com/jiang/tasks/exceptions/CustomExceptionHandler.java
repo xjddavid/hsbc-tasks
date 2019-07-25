@@ -38,4 +38,11 @@ public class CustomExceptionHandler {
     String wrongDateFormatHandler(StatusException ex) {
         return ex.getMessage();
     }
+
+    @ResponseBody
+    @ExceptionHandler(TitleException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    String wrongDateFormatHandler(TitleException ex) {
+        return ex.getMessage();
+    }
 }
