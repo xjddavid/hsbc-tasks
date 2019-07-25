@@ -3,6 +3,7 @@ package com.jiang.tasks.service;
 import com.jiang.tasks.domain.Task;
 import com.jiang.tasks.dto.Status;
 import com.jiang.tasks.dto.TaskCreateDto;
+import com.jiang.tasks.dto.TaskQueryDto;
 import com.jiang.tasks.dto.TaskUpdateDto;
 import com.jiang.tasks.repository.TaskRepository;
 import com.jiang.tasks.repository.TaskRepositorySpec;
@@ -25,7 +26,8 @@ public class TaskService {
 
 
     public List<Task> findAll(Map<String, String> requestParams) {
-        return taskRepository.findAll(TaskRepositorySpec.getSpec(requestParams));
+        TaskQueryDto taskQueryDto = TaskQueryDto.convertToTaskQueryDto(requestParams);
+        return taskRepository.findAll(TaskRepositorySpec.getSpec(taskQueryDto));
     }
 
     public Optional<Task> findById(Long id) {
@@ -33,11 +35,11 @@ public class TaskService {
     }
 
 
-    public Task save(TaskCreateDto taskCreateDto) throws ParseException {
+    public Task save(TaskCreateDto taskCreateDto) {
         Task newTask = new Task();
         newTask.setStatus(Status.CREATED.getStatus());
         newTask.setTitle(taskCreateDto.getTitle());
-        newTask.setDueDate(new SimpleDateFormat("ddMMyyyy").parse(taskCreateDto.getDueDate()));
+        newTask.setDueDate(taskCreateDto.getDueDate());
         return taskRepository.save(newTask);
     }
 
@@ -52,11 +54,7 @@ public class TaskService {
                         task.setTitle(newTask.getTitle());
                     }
                     if (newTask.getDueDate() != null) {
-                        try {
-                            task.setDueDate(new SimpleDateFormat("ddMMyyyy").parse(newTask.getDueDate()));
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
+                        task.setDueDate(newTask.getDueDate());
                     }
                     if (newTask.getStatus() != null) {
                         task.setStatus(newTask.getStatus().getStatus());

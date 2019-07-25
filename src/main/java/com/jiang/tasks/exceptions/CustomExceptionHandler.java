@@ -1,4 +1,4 @@
-package com.jiang.tasks;
+package com.jiang.tasks.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -23,5 +23,19 @@ public class CustomExceptionHandler {
     String badRequestHandler(HttpMessageNotReadableException ex) {
         ex.printStackTrace();
         return "Not valid request";
+    }
+
+    @ResponseBody
+    @ExceptionHandler(DateParseException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    String wrongDateFormatHandler(DateParseException ex) {
+        return ex.getMessage();
+    }
+
+    @ResponseBody
+    @ExceptionHandler(StatusException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    String wrongDateFormatHandler(StatusException ex) {
+        return ex.getMessage();
     }
 }

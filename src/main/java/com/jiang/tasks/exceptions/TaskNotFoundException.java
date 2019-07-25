@@ -1,4 +1,4 @@
-package com.jiang.tasks;
+package com.jiang.tasks.exceptions;
 
 public class TaskNotFoundException extends RuntimeException {
     public TaskNotFoundException(Long id) {

@@ -1,11 +1,10 @@
 package com.jiang.tasks.controller;
 
-import com.jiang.tasks.TaskNotFoundException;
+import com.jiang.tasks.exceptions.TaskNotFoundException;
 import com.jiang.tasks.domain.Task;
 import com.jiang.tasks.dto.TaskCreateDto;
 import com.jiang.tasks.dto.TaskUpdateDto;
 import com.jiang.tasks.service.TaskService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -41,7 +40,7 @@ public class TaskController {
     }
 
     @PostMapping("/tasks")
-    Task newTask(@RequestBody TaskCreateDto taskCreateDto) throws ParseException {
+    Task newTask(@RequestBody TaskCreateDto taskCreateDto) {
         return taskService.save(taskCreateDto);
     }
 
