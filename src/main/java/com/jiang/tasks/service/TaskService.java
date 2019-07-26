@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 public class TaskService {
@@ -31,8 +30,9 @@ public class TaskService {
         return taskRepository.findAll(TaskRepositorySpec.getSpec(taskQueryDto));
     }
 
-    public Optional<Task> findById(Long id) {
-        return taskRepository.findById(id);
+    public Task findById(Long id) {
+        return taskRepository.findById(id)
+                .orElseThrow(() -> new TaskNotFoundException(id));
     }
 
 
@@ -52,7 +52,7 @@ public class TaskService {
         taskRepository.deleteById(id);
     }
 
-    public Optional<Task> update(TaskUpdateDto newTask, Long id) {
+    public Task update(TaskUpdateDto newTask, Long id) {
         return taskRepository.findById(id)
                 .map(task -> {
                     if (newTask.getTitle() != null) {
@@ -64,7 +64,7 @@ public class TaskService {
                     if (newTask.getStatus() != null) {
                         task.setStatus(newTask.getStatus().getStatus());
                     }
-                    return Optional.of(taskRepository.save(task));
+                    return taskRepository.save(task);
                 })
                 .orElseThrow(() -> new TaskNotFoundException(id));
     }

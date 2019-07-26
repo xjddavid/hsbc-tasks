@@ -1,13 +1,11 @@
 package com.jiang.tasks.controller;
 
-import com.jiang.tasks.exceptions.TaskNotFoundException;
 import com.jiang.tasks.domain.Task;
 import com.jiang.tasks.dto.TaskCreateDto;
 import com.jiang.tasks.dto.TaskUpdateDto;
 import com.jiang.tasks.service.TaskService;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
@@ -26,13 +24,6 @@ public class TaskController {
         return "hello world";
     }
 
-//    @RequestMapping("/tasks")
-//    @ResponseBody
-//    public Result<Task> getTask(@RequestParam(value = "id", required = false) Long id) {
-//        Optional<Task> task = taskRepository.findById(id);
-//        return task.map(Result::success).orElse(Result.error(QUERY_ERROR));
-//    }
-
     @GetMapping("/tasks")
     List<Task> all(@RequestParam Map<String, String> requestParams) {
 
@@ -46,13 +37,12 @@ public class TaskController {
 
     @GetMapping("/tasks/{id}")
     Task one(@PathVariable Long id) {
-        return taskService.findById(id)
-                .orElseThrow(() -> new TaskNotFoundException(id));
+        return taskService.findById(id);
     }
 
     @PutMapping("/tasks/{id}")
     Task replaceTask(@RequestBody TaskUpdateDto newTask, @PathVariable Long id) {
-        return taskService.update(newTask, id).orElseThrow(() -> new TaskNotFoundException(id));
+        return taskService.update(newTask, id);
     }
 
     @DeleteMapping("/tasks/{id}")
