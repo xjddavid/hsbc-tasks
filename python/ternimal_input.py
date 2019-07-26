@@ -123,6 +123,7 @@ if __name__ == '__main__':
     while True:
         command = input()
         response = parse_input(command)
+        print(response)
         with open('operation.log', 'a') as f:
             f.write(datetime.datetime.now().__str__() + '\t' + command + '\n')
             f.write(response + '\n')
