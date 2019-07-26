@@ -33,8 +33,12 @@ def get_list_params(word):
         return VALID, get_day_query(current_day)
     elif re.match("^[\d]{2}/[\d]{2}/[\d]{4}$", words[-1]):
         date = words[-1].split("/")
-        current_day = datetime.date(int(date[2]), int(date[1]), int(date[0]))
-        return VALID, get_day_query(current_day)
+        try:
+            current_day = datetime.date(int(date[2]), int(date[1]), int(date[0]))
+            return VALID, get_day_query(current_day)
+        except ValueError as e:
+            return ERROR, e.__str__()
+
     else:
         return ERROR, "Expiring parameter wrong. Valid Examples are --expiring-today, --expiring-12/01/2020"
 
@@ -48,7 +52,7 @@ def get_add_params(words):
     if not re.match("^[\d]{2}/[\d]{2}/[\d]{4}$", words[-1]):
         return ERROR, "Date format should be dd/MM/yyyy"
     title = " ".join(words[:-1])[1:-1]
-    if title == "":
+    if title == "" or title == " ":
         return ERROR, "Title cannot be empty string"
     add_json["title"] = title
     add_json["dueDate"] = "".join(words[-1].split('/'))
