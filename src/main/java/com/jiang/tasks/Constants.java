@@ -8,6 +8,7 @@ import java.util.Date;
 
 public final class Constants {
     private static final String datePattern = "ddMMyyyy";
+    private static final String dateReturnPattern = "dd/MM/yyyy";
 
     public static Date convertStringToDate(String s) throws DateParseException {
         if (s.length() != 8) {
@@ -20,5 +21,9 @@ public final class Constants {
             e.printStackTrace();
             throw new DateParseException(s);
         }
+    }
+
+    public static String convertDateToString(Date date) throws DateParseException {
+        return new SimpleDateFormat(Constants.dateReturnPattern).format(date);
     }
 }

@@ -1,5 +1,6 @@
 package com.jiang.tasks.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,7 @@ import java.util.Date;
 @Entity
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Task implements Serializable {
     @Id
     @GeneratedValue

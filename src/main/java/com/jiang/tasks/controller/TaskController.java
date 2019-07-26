@@ -1,7 +1,7 @@
 package com.jiang.tasks.controller;
 
-import com.jiang.tasks.domain.Task;
 import com.jiang.tasks.dto.TaskCreateDto;
+import com.jiang.tasks.dto.TaskReturnDto;
 import com.jiang.tasks.dto.TaskUpdateDto;
 import com.jiang.tasks.service.TaskService;
 import org.springframework.web.bind.annotation.*;
@@ -25,23 +25,23 @@ public class TaskController {
     }
 
     @GetMapping("/tasks")
-    List<Task> all(@RequestParam Map<String, String> requestParams) {
+    List<TaskReturnDto> all(@RequestParam Map<String, String> requestParams) {
 
         return taskService.findAll(requestParams);
     }
 
     @PostMapping("/tasks")
-    Task newTask(@RequestBody TaskCreateDto taskCreateDto) {
+    TaskReturnDto newTask(@RequestBody TaskCreateDto taskCreateDto) {
         return taskService.save(taskCreateDto);
     }
 
     @GetMapping("/tasks/{id}")
-    Task one(@PathVariable Long id) {
+    TaskReturnDto one(@PathVariable Long id) {
         return taskService.findById(id);
     }
 
     @PutMapping("/tasks/{id}")
-    Task replaceTask(@RequestBody TaskUpdateDto newTask, @PathVariable Long id) {
+    TaskReturnDto replaceTask(@RequestBody TaskUpdateDto newTask, @PathVariable Long id) {
         return taskService.update(newTask, id);
     }
 
