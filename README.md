@@ -2,10 +2,10 @@
 You need have docker, java and python installed in your system.
 
 #Start Application
-1. clone the repo and cd 
+1. clone the repo and cd repo folder
 
 2. Using docker to start mysql
-docker run -p 3306:3306 --name mysql -v /root/IdeaProjects/HsbcTasks/data/mysql:/var/lib/mysql -v /root/IdeaProjects/HsbcTasks/data:/docker-entrypoint-initdb.d -e MYSQL_ROOT_PASSWORD=123456  -d mysql
+docker run -p 3306:3306 --name mysql -v /route/to/repo/data/mysql:/var/lib/mysql -v /route/to/repo/data:/docker-entrypoint-initdb.d -e MYSQL_ROOT_PASSWORD=123456  -d mysql
 
 3. run backend spring service 
 java -jar target/tasks-1.0-SNAPSHOT.jar
