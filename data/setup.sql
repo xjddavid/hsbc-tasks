@@ -1,0 +1,3 @@
+CREATE DATABASE hsbc;
+
+USE hsbc;
