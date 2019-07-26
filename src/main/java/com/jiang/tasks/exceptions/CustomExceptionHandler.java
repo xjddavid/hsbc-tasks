@@ -35,14 +35,14 @@ public class CustomExceptionHandler {
     @ResponseBody
     @ExceptionHandler(StatusException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    String wrongDateFormatHandler(StatusException ex) {
+    String wrongStatusHandler(StatusException ex) {
         return ex.getMessage();
     }
 
     @ResponseBody
     @ExceptionHandler(TitleException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    String wrongDateFormatHandler(TitleException ex) {
+    String wrongTitleHandler(TitleException ex) {
         return ex.getMessage();
     }
 }

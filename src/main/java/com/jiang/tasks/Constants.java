@@ -7,9 +7,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public final class Constants {
-    public static final String datePattern = "ddMMyyyy";
+    private static final String datePattern = "ddMMyyyy";
 
     public static Date convertStringToDate(String s) throws DateParseException {
+        if (s.length() != 8) {
+            System.out.println(s + "is not a valid date input.");
+            throw new DateParseException(s);
+        }
         try {
             return new SimpleDateFormat(Constants.datePattern).parse(s);
         } catch (ParseException e) {
