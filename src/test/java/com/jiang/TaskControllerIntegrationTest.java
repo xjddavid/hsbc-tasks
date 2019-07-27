@@ -115,6 +115,18 @@ public class TaskControllerIntegrationTest {
     }
 
     @Test
+    public void addNewTaskWithNotValidTitle() throws Exception {
+        TaskCreateDto taskCreateDto = new TaskCreateDto("   ", "12122019");
+        mockMvc.perform(post(rootUrl)
+                .content(om.writeValueAsString(taskCreateDto))
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Title must be a valid string"));
+
+        verify(mockRepository, times(0)).save(any(Task.class));
+    }
+
+    @Test
     public void updateTaskOk() throws Exception {
 
         Task newTask = new Task(1L, "Spring Boot Guide", Constants.convertStringToDate("12122019"), "CREATED");
@@ -168,7 +180,7 @@ public class TaskControllerIntegrationTest {
                 .content(om.writeValueAsString(requestBody))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("Cannot parse the date 123456789. Valid date format is DDMMYYYY. "));
+                .andExpect(content().string("Cannot parse the date 123456789. Valid date format is DDMMYYYY."));
 
         verify(mockRepository, times(0)).save(any(Task.class));
     }

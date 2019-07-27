@@ -39,7 +39,7 @@ public class TaskService {
     public TaskReturnDto save(TaskCreateDto taskCreateDto) {
         Task newTask = new Task();
         newTask.setStatus(Status.CREATED.getStatus());
-        if (taskCreateDto.getTitle().equals("")) {
+        if (Constants.isEmpty(taskCreateDto.getTitle())) {
             throw new TitleException();
         }
         newTask.setTitle(taskCreateDto.getTitle());

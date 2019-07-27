@@ -26,4 +26,8 @@ public final class Constants {
     public static String convertDateToString(Date date) throws DateParseException {
         return new SimpleDateFormat(Constants.dateReturnPattern).format(date);
     }
+
+    public static boolean isEmpty(String str) {
+        return str == null || str.trim().length() == 0;
+    }
 }
