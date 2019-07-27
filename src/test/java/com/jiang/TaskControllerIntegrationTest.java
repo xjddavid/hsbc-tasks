@@ -166,12 +166,27 @@ public class TaskControllerIntegrationTest {
     @Test
     public void updateTaskWithNotValidStatus() throws Exception {
         HashMap<String, String> requestBody = new HashMap<>();
+        requestBody.put("dueDate", "12345678");
+        requestBody.put("title", "hehe");
         requestBody.put("status", "hehe");
         mockMvc.perform(put(rootUrl + "/2")
                 .content(om.writeValueAsString(requestBody))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("Not valid request"));
+
+        verify(mockRepository, times(0)).save(any(Task.class));
+    }
+
+    @Test
+    public void patchTaskWithNotValidStatus() throws Exception {
+        HashMap<String, String> requestBody = new HashMap<>();
+        requestBody.put("status", "hehe");
+        mockMvc.perform(patch(rootUrl + "/1")
+                .content(om.writeValueAsString(requestBody))
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("hehe is not a valid status"));
 
         verify(mockRepository, times(0)).save(any(Task.class));
     }

@@ -46,7 +46,7 @@ public class TaskController {
     }
 
     @PatchMapping("/tasks/{id}")
-    TaskReturnDto patchTask(Map<String, String> update, @PathVariable Long id) {
+    TaskReturnDto patchTask(@RequestBody Map<String, String> update, @PathVariable Long id) {
         return taskService.pacth(update, id);
     }
 
