@@ -27,3 +27,5 @@ tasks list --expiring-12/12/2019
 tasks done 3
 
 7. all the operation and console output will be logged in the operation.log file.
+
+8. you can stop the front end script by type "stop" in the terminal. 
