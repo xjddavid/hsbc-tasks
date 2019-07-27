@@ -13,16 +13,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -62,29 +66,29 @@ public class TaskControllerIntegrationTest {
 
     }
 
-//    @Test
-//    public void find_all_Task_OK() throws Exception {
-//
-//        List<Task> tasks = Arrays.asList(
-//                new Task(1L, "Task A", Constants.convertStringToDate("12122019"), "DONE"),
-//                new Task(2L, "Task B", Constants.convertStringToDate("12122019"), "CREATED"));
+    @Test
+    public void find_all_Task_OK() throws Exception {
+
+        List<Task> tasks = Arrays.asList(
+                new Task(1L, "Task A", Constants.convertStringToDate("12122019"), "DONE"),
+                new Task(2L, "Task B", Constants.convertStringToDate("12122019"), "CREATED"));
 //        TaskQueryDto taskQueryDto = new TaskQueryDto();
-//        when(mockRepository.findAll(TaskRepositorySpec.getSpec(taskQueryDto))).thenReturn(tasks);
-//
-//        mockMvc.perform(get(rootUrl))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$", hasSize(2)))
-//                .andExpect(jsonPath("$[0].id", is(1)))
-//                .andExpect(jsonPath("$[0].title", is("Task A")))
-//                .andExpect(jsonPath("$[0].dueDate", is("12/12/2019")))
-//                .andExpect(jsonPath("$[0].status", is("")))
-//                .andExpect(jsonPath("$[1].id", is("DONE")))
-//                .andExpect(jsonPath("$[1].title", is("Task B")))
-//                .andExpect(jsonPath("$[1].dueDate", is("12/12/2019")))
-//                .andExpect(jsonPath("$[1].status", is("CREATED")));
-//
-//        verify(mockRepository, times(1)).findAll();
-//    }
+        when(mockRepository.findAll((Specification<Task>) any())).thenReturn(tasks);
+
+        mockMvc.perform(get(rootUrl+"?from=12122019&to=13122019"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].id", is(1)))
+                .andExpect(jsonPath("$[0].title", is("Task A")))
+                .andExpect(jsonPath("$[0].dueDate", is("12/12/2019")))
+                .andExpect(jsonPath("$[0].status", is("DONE")))
+                .andExpect(jsonPath("$[1].id", is(2)))
+                .andExpect(jsonPath("$[1].title", is("Task B")))
+                .andExpect(jsonPath("$[1].dueDate", is("12/12/2019")))
+                .andExpect(jsonPath("$[1].status", is("CREATED")));
+
+        verify(mockRepository, times(1)).findAll((Specification<Task>) any());
+    }
 
     @Test
     public void findTaskByIdNotFound_404() throws Exception {
