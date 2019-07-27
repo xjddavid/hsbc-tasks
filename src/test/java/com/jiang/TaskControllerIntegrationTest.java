@@ -20,6 +20,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
@@ -129,14 +131,48 @@ public class TaskControllerIntegrationTest {
                 .andExpect(jsonPath("$.dueDate", is("12/12/2019")))
                 .andExpect(jsonPath("$.status", is("CREATED")));
 
+        verify(mockRepository, times(1)).save(any(Task.class));
+    }
+
+    @Test
+    public void updateNotExistTask() throws Exception {
+        TaskUpdateDto taskUpdateDto = new TaskUpdateDto();
+        taskUpdateDto.setTitle("Spring Boot Guide");
         mockMvc.perform(put(rootUrl + "/2")
                 .content(om.writeValueAsString(taskUpdateDto))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("Could not find task 2"));
 
-        verify(mockRepository, times(1)).save(any(Task.class));
+        verify(mockRepository, times(0)).save(any(Task.class));
     }
+
+    @Test
+    public void updateTaskWithNotValidStatus() throws Exception {
+        HashMap<String, String> requestBody = new HashMap<>();
+        requestBody.put("status", "hehe");
+        mockMvc.perform(put(rootUrl + "/2")
+                .content(om.writeValueAsString(requestBody))
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Not valid request"));
+
+        verify(mockRepository, times(0)).save(any(Task.class));
+    }
+
+    @Test
+    public void updateTaskWithNotValidDate() throws Exception {
+        HashMap<String, String> requestBody = new HashMap<>();
+        requestBody.put("dueDate", "123456789");
+        mockMvc.perform(put(rootUrl + "/1")
+                .content(om.writeValueAsString(requestBody))
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Cannot parse the date 123456789. Valid date format is DDMMYYYY. "));
+
+        verify(mockRepository, times(0)).save(any(Task.class));
+    }
+
 
     @Test
     public void deleteTaskOK() throws Exception {
