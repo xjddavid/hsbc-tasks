@@ -45,6 +45,11 @@ public class TaskController {
         return taskService.update(newTask, id);
     }
 
+    @PatchMapping("/tasks/{id}")
+    TaskReturnDto patchTask(Map<String, String> update, @PathVariable Long id) {
+        return taskService.pacth(update, id);
+    }
+
     @DeleteMapping("/tasks/{id}")
     void deleteTask(@PathVariable Long id) {
         taskService.deleteById(id);

@@ -3,6 +3,7 @@ package com.jiang.tasks.service;
 import com.jiang.tasks.Constants;
 import com.jiang.tasks.domain.Task;
 import com.jiang.tasks.dto.*;
+import com.jiang.tasks.exceptions.StatusException;
 import com.jiang.tasks.exceptions.TaskNotFoundException;
 import com.jiang.tasks.exceptions.TitleException;
 import com.jiang.tasks.repository.TaskRepository;
@@ -56,18 +57,39 @@ public class TaskService {
     public TaskReturnDto update(TaskUpdateDto newTask, Long id) {
         return taskRepository.findById(id)
                 .map(task -> {
-                    if (newTask.getTitle() != null) {
-                        task.setTitle(newTask.getTitle());
+                    if (Constants.isEmpty(newTask.getTitle())) {
+                        throw new TitleException();
                     }
-                    if (newTask.getDueDate() != null) {
-                        task.setDueDate(Constants.convertStringToDate(newTask.getDueDate()));
-                    }
-                    if (newTask.getStatus() != null) {
-                        task.setStatus(newTask.getStatus().getStatus());
-                    }
+                    task.setTitle(newTask.getTitle());
+                    task.setDueDate(Constants.convertStringToDate(newTask.getDueDate()));
+                    task.setStatus(newTask.getStatus().getStatus());
                     Task updatedTask = taskRepository.save(task);
                     return TaskReturnDto.convertTaskToReturnDto(updatedTask);
 
+                })
+                .orElseThrow(() -> new TaskNotFoundException(id));
+    }
+
+    public TaskReturnDto pacth(Map<String, String> update, Long id) {
+        return taskRepository.findById(id)
+                .map(task -> {
+                    if (update.get("title") != null) {
+                        if (Constants.isEmpty(update.get("title"))) {
+                            throw new TitleException();
+                        }
+                        task.setTitle(update.get("title"));
+                    }
+                    if (update.get("dueDate") != null) {
+                        task.setDueDate(Constants.convertStringToDate(update.get("dueDate")));
+                    }
+                    if (update.get("status") != null) {
+                        if (!Status.contain(update.get("status"))) {
+                            throw new StatusException(update.get("status"));
+                        }
+                        task.setStatus(update.get("status"));
+                    }
+                    Task updatedTask = taskRepository.save(task);
+                    return TaskReturnDto.convertTaskToReturnDto(updatedTask);
                 })
                 .orElseThrow(() -> new TaskNotFoundException(id));
     }

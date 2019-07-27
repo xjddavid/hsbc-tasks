@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jiang.tasks.Constants;
 import com.jiang.tasks.MainApplication;
 import com.jiang.tasks.domain.Task;
-import com.jiang.tasks.dto.TaskCreateDto;
 import com.jiang.tasks.dto.TaskUpdateDto;
 import com.jiang.tasks.repository.TaskRepository;
 import org.junit.Before;
@@ -21,7 +20,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
@@ -99,11 +97,13 @@ public class TaskControllerIntegrationTest {
     public void saveTaskOk() throws Exception {
 
         Task newTask = new Task(1L, "Spring Boot Guide", Constants.convertStringToDate("12122019"), "CREATED");
-        TaskCreateDto taskCreateDto = new TaskCreateDto("Spring Boot Guide", "12122019");
+        HashMap<String, String> requestBody = new HashMap<>();
+        requestBody.put("dueDate", "12122019");
+        requestBody.put("title", "Spring Boot Guide");
         when(mockRepository.save(any(Task.class))).thenReturn(newTask);
 
         mockMvc.perform(post(rootUrl)
-                .content(om.writeValueAsString(taskCreateDto))
+                .content(om.writeValueAsString(requestBody))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)))
@@ -116,9 +116,11 @@ public class TaskControllerIntegrationTest {
 
     @Test
     public void addNewTaskWithNotValidTitle() throws Exception {
-        TaskCreateDto taskCreateDto = new TaskCreateDto("   ", "12122019");
+        HashMap<String, String> requestBody = new HashMap<>();
+        requestBody.put("dueDate", "12122019");
+        requestBody.put("title", "   ");
         mockMvc.perform(post(rootUrl)
-                .content(om.writeValueAsString(taskCreateDto))
+                .content(om.writeValueAsString(requestBody))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("Title must be a valid string"));
@@ -130,12 +132,14 @@ public class TaskControllerIntegrationTest {
     public void updateTaskOk() throws Exception {
 
         Task newTask = new Task(1L, "Spring Boot Guide", Constants.convertStringToDate("12122019"), "CREATED");
-        TaskUpdateDto taskUpdateDto = new TaskUpdateDto();
-        taskUpdateDto.setTitle("Spring Boot Guide");
+        HashMap<String, String> requestBody = new HashMap<>();
+        requestBody.put("dueDate", "12122019");
+        requestBody.put("title", "Spring Boot Guide");
+        requestBody.put("status", "CREATED");
         when(mockRepository.save(any(Task.class))).thenReturn(newTask);
 
         mockMvc.perform(put(rootUrl + "/1")
-                .content(om.writeValueAsString(taskUpdateDto))
+                .content(om.writeValueAsString(requestBody))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)))
@@ -176,6 +180,8 @@ public class TaskControllerIntegrationTest {
     public void updateTaskWithNotValidDate() throws Exception {
         HashMap<String, String> requestBody = new HashMap<>();
         requestBody.put("dueDate", "123456789");
+        requestBody.put("title", "hehe");
+        requestBody.put("status", "CREATED");
         mockMvc.perform(put(rootUrl + "/1")
                 .content(om.writeValueAsString(requestBody))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
@@ -195,6 +201,26 @@ public class TaskControllerIntegrationTest {
                 .andExpect(status().isOk());
 
         verify(mockRepository, times(1)).deleteById(1L);
+    }
+
+    @Test
+    public void patchTaskOk() throws Exception {
+
+        Task newTask = new Task(1L, "Spring Boot Guide", Constants.convertStringToDate("12122019"), "CREATED");
+        HashMap<String, String> requestBody = new HashMap<>();
+        requestBody.put("dueDate", "12122019");
+        when(mockRepository.save(any(Task.class))).thenReturn(newTask);
+
+        mockMvc.perform(patch(rootUrl + "/1")
+                .content(om.writeValueAsString(requestBody))
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.title", is("Spring Boot Guide")))
+                .andExpect(jsonPath("$.dueDate", is("12/12/2019")))
+                .andExpect(jsonPath("$.status", is("CREATED")));
+
+        verify(mockRepository, times(1)).save(any(Task.class));
     }
 
 }
