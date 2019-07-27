@@ -3,6 +3,7 @@ package com.jiang.tasks.service;
 import com.jiang.tasks.Constants;
 import com.jiang.tasks.domain.Task;
 import com.jiang.tasks.dto.*;
+import com.jiang.tasks.exceptions.EmptyPatchParamException;
 import com.jiang.tasks.exceptions.StatusException;
 import com.jiang.tasks.exceptions.TaskNotFoundException;
 import com.jiang.tasks.exceptions.TitleException;
@@ -71,6 +72,9 @@ public class TaskService {
     }
 
     public TaskReturnDto pacth(Map<String, String> update, Long id) {
+        if (update.size() == 0) {
+            throw new EmptyPatchParamException();
+        }
         return taskRepository.findById(id)
                 .map(task -> {
                     if (update.get("title") != null) {

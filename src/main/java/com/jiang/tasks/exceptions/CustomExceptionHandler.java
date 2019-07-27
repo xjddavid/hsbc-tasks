@@ -45,4 +45,11 @@ public class CustomExceptionHandler {
     String wrongTitleHandler(TitleException ex) {
         return ex.getMessage();
     }
+
+    @ResponseBody
+    @ExceptionHandler(EmptyPatchParamException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    String emptyPatchParamHandler(EmptyPatchParamException ex) {
+        return ex.getMessage();
+    }
 }

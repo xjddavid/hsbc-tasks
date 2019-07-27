@@ -238,4 +238,16 @@ public class TaskControllerIntegrationTest {
         verify(mockRepository, times(1)).save(any(Task.class));
     }
 
+    @Test
+    public void patchTaskWithEmptyMap() throws Exception {
+        HashMap<String, String> requestBody = new HashMap<>();
+        mockMvc.perform(patch(rootUrl + "/1")
+                .content(om.writeValueAsString(requestBody))
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Patch parameters should not be empty"));
+
+        verify(mockRepository, times(0)).save(any(Task.class));
+    }
+
 }
