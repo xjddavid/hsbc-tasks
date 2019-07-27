@@ -72,7 +72,6 @@ public class TaskControllerIntegrationTest {
         List<Task> tasks = Arrays.asList(
                 new Task(1L, "Task A", Constants.convertStringToDate("12122019"), "DONE"),
                 new Task(2L, "Task B", Constants.convertStringToDate("12122019"), "CREATED"));
-//        TaskQueryDto taskQueryDto = new TaskQueryDto();
         when(mockRepository.findAll((Specification<Task>) any())).thenReturn(tasks);
 
         mockMvc.perform(get(rootUrl+"?from=12122019&to=13122019"))

@@ -5,6 +5,7 @@ import datetime
 
 ERROR = "ERROR"
 VALID = "VALID"
+STOP = "STOP"
 OPERATIONS = ["add", "done", "delete", "list"]
 URL = "http://localhost:8080/api/tasks"
 SUCCESS_CODE = 200
@@ -62,6 +63,8 @@ def get_add_params(words):
 def parse_input(s):
     if s is None:
         return "No input!"
+    if s == "stop":
+        return STOP
     words = s.split()
     if len(words) < 2:
         return "Invalid input"
@@ -123,6 +126,8 @@ if __name__ == '__main__':
     while True:
         command = input()
         response = parse_input(command)
+        if response == STOP:
+            break
         print(response)
         with open('operation.log', 'a') as f:
             f.write(datetime.datetime.now().__str__() + '\t' + command + '\n')
