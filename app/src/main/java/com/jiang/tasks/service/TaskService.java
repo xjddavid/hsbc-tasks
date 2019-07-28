@@ -1,6 +1,6 @@
 package com.jiang.tasks.service;
 
-import com.jiang.tasks.DateUtils;
+import com.jiang.tasks.Utils;
 import com.jiang.tasks.domain.Task;
 import com.jiang.tasks.dto.*;
 import com.jiang.tasks.exceptions.EmptyPatchParamException;
@@ -41,11 +41,11 @@ public class TaskService {
     public TaskReturnDto save(TaskCreateDto taskCreateDto) {
         Task newTask = new Task();
         newTask.setStatus(Status.CREATED.getStatus());
-        if (DateUtils.isEmpty(taskCreateDto.getTitle())) {
+        if (Utils.isEmpty(taskCreateDto.getTitle())) {
             throw new TitleException();
         }
         newTask.setTitle(taskCreateDto.getTitle());
-        newTask.setDueDate(DateUtils.convertStringToDate(taskCreateDto.getDueDate()));
+        newTask.setDueDate(Utils.convertStringToDate(taskCreateDto.getDueDate()));
         Task task = taskRepository.save(newTask);
         return TaskReturnDto.convertTaskToReturnDto(task);
     }
@@ -58,11 +58,11 @@ public class TaskService {
     public TaskReturnDto update(TaskUpdateDto newTask, Long id) {
         return taskRepository.findById(id)
                 .map(task -> {
-                    if (DateUtils.isEmpty(newTask.getTitle())) {
+                    if (Utils.isEmpty(newTask.getTitle())) {
                         throw new TitleException();
                     }
                     task.setTitle(newTask.getTitle());
-                    task.setDueDate(DateUtils.convertStringToDate(newTask.getDueDate()));
+                    task.setDueDate(Utils.convertStringToDate(newTask.getDueDate()));
                     task.setStatus(newTask.getStatus().getStatus());
                     Task updatedTask = taskRepository.save(task);
                     return TaskReturnDto.convertTaskToReturnDto(updatedTask);
@@ -78,13 +78,13 @@ public class TaskService {
         return taskRepository.findById(id)
                 .map(task -> {
                     if (update.get("title") != null) {
-                        if (DateUtils.isEmpty(update.get("title"))) {
+                        if (Utils.isEmpty(update.get("title"))) {
                             throw new TitleException();
                         }
                         task.setTitle(update.get("title"));
                     }
                     if (update.get("dueDate") != null) {
-                        task.setDueDate(DateUtils.convertStringToDate(update.get("dueDate")));
+                        task.setDueDate(Utils.convertStringToDate(update.get("dueDate")));
                     }
                     if (update.get("status") != null) {
                         if (!Status.contain(update.get("status"))) {

@@ -6,7 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public final class DateUtils {
+public final class Utils {
     private static final String datePattern = "ddMMyyyy";
     private static final String dateReturnPattern = "dd/MM/yyyy";
 
@@ -16,7 +16,7 @@ public final class DateUtils {
             throw new DateParseException(s);
         }
         try {
-            return new SimpleDateFormat(DateUtils.datePattern).parse(s);
+            return new SimpleDateFormat(Utils.datePattern).parse(s);
         } catch (ParseException e) {
             e.printStackTrace();
             throw new DateParseException(s);
@@ -24,7 +24,7 @@ public final class DateUtils {
     }
 
     public static String convertDateToString(Date date) throws DateParseException {
-        return new SimpleDateFormat(DateUtils.dateReturnPattern).format(date);
+        return new SimpleDateFormat(Utils.dateReturnPattern).format(date);
     }
 
     public static boolean isEmpty(String str) {

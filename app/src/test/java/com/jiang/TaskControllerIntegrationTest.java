@@ -1,7 +1,7 @@
 package com.jiang;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jiang.tasks.DateUtils;
+import com.jiang.tasks.Utils;
 import com.jiang.tasks.MainApplication;
 import com.jiang.tasks.domain.Task;
 import com.jiang.tasks.dto.TaskUpdateDto;
@@ -48,7 +48,7 @@ public class TaskControllerIntegrationTest {
 
     @Before
     public void init() {
-        Task task = new Task(1L, "Good task", DateUtils.convertStringToDate("12122019"), "CREATED");
+        Task task = new Task(1L, "Good task", Utils.convertStringToDate("12122019"), "CREATED");
         when(mockRepository.findById(1L)).thenReturn(Optional.of(task));
     }
 
@@ -70,8 +70,8 @@ public class TaskControllerIntegrationTest {
     public void find_all_Task_OK() throws Exception {
 
         List<Task> tasks = Arrays.asList(
-                new Task(1L, "Task A", DateUtils.convertStringToDate("12122019"), "DONE"),
-                new Task(2L, "Task B", DateUtils.convertStringToDate("12122019"), "CREATED"));
+                new Task(1L, "Task A", Utils.convertStringToDate("12122019"), "DONE"),
+                new Task(2L, "Task B", Utils.convertStringToDate("12122019"), "CREATED"));
         when(mockRepository.findAll((Specification<Task>) any())).thenReturn(tasks);
 
         mockMvc.perform(get(rootUrl+"?from=12122019&to=13122019"))
@@ -99,7 +99,7 @@ public class TaskControllerIntegrationTest {
     @Test
     public void saveTaskOk() throws Exception {
 
-        Task newTask = new Task(1L, "Spring Boot Guide", DateUtils.convertStringToDate("12122019"), "CREATED");
+        Task newTask = new Task(1L, "Spring Boot Guide", Utils.convertStringToDate("12122019"), "CREATED");
         HashMap<String, String> requestBody = new HashMap<>();
         requestBody.put("dueDate", "12122019");
         requestBody.put("title", "Spring Boot Guide");
@@ -134,7 +134,7 @@ public class TaskControllerIntegrationTest {
     @Test
     public void updateTaskOk() throws Exception {
 
-        Task newTask = new Task(1L, "Spring Boot Guide", DateUtils.convertStringToDate("12122019"), "CREATED");
+        Task newTask = new Task(1L, "Spring Boot Guide", Utils.convertStringToDate("12122019"), "CREATED");
         HashMap<String, String> requestBody = new HashMap<>();
         requestBody.put("dueDate", "12122019");
         requestBody.put("title", "Spring Boot Guide");
@@ -224,7 +224,7 @@ public class TaskControllerIntegrationTest {
     @Test
     public void patchTaskOk() throws Exception {
 
-        Task newTask = new Task(1L, "Spring Boot Guide", DateUtils.convertStringToDate("12122019"), "CREATED");
+        Task newTask = new Task(1L, "Spring Boot Guide", Utils.convertStringToDate("12122019"), "CREATED");
         HashMap<String, String> requestBody = new HashMap<>();
         requestBody.put("dueDate", "12122019");
         when(mockRepository.save(any(Task.class))).thenReturn(newTask);
