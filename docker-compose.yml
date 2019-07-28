@@ -9,6 +9,8 @@ services:
       - 443:443
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - app
 
   mysql:
     container_name: mysql
@@ -33,6 +35,5 @@ services:
     expose:
       - "8080"
     depends_on:
-      - nginx
       - mysql
     command: mvn clean spring-boot:run -Dspring-boot.run.profiles=docker
