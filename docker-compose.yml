@@ -1,0 +1,38 @@
+version: '3'
+services:
+  nginx:
+    container_name: nginx
+    image: nginx:1.13
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+
+  mysql:
+    container_name: mysql
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+      - ./data:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
+    restart: always
+    cap_add:
+      - SYS_NICE  # CAP_SYS_NICE
+
+  app:
+    restart: always
+    build: ./app
+    working_dir: /app
+    volumes:
+      - ./app:/app
+    expose:
+      - "8080"
+    depends_on:
+      - nginx
+      - mysql
+    command: mvn clean spring-boot:run -Dspring-boot.run.profiles=docker

@@ -7,7 +7,7 @@ ERROR = "ERROR"
 VALID = "VALID"
 STOP = "STOP"
 OPERATIONS = ["add", "done", "delete", "list"]
-URL = "http://localhost:8080/api/tasks"
+URL = "http://localhost:80/api/tasks"
 SUCCESS_CODE = 200
 
 
