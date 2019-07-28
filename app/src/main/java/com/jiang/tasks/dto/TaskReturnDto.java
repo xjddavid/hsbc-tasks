@@ -1,6 +1,6 @@
 package com.jiang.tasks.dto;
 
-import com.jiang.tasks.Constants;
+import com.jiang.tasks.DateUtils;
 import com.jiang.tasks.domain.Task;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +18,7 @@ public class TaskReturnDto {
         taskReturnDto.setId(task.getId());
         taskReturnDto.setStatus(task.getStatus());
         taskReturnDto.setTitle(task.getTitle());
-        taskReturnDto.setDueDate(Constants.convertDateToString(task.getDueDate()));
+        taskReturnDto.setDueDate(DateUtils.convertDateToString(task.getDueDate()));
         return taskReturnDto;
     }
 }
