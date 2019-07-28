@@ -25,10 +25,10 @@ database and use it when mysql starts.
 Folder python contains the front end python script and corresponding unit test script.
 
 
-#Prepare Environmet
+# Prepare Environmet
 You need have docker and python installed in your system.
 
-#Start Application
+# Start Application
 1. clone the repo and cd repo folder
 
 2. Using docker-compose to start the backend spring application. Type the following command in the terminal. It might take some time to download the docker images and java dependencies. You can have a coffee break.
@@ -44,7 +44,7 @@ python3 python/terminal_input.py
 6. You can stop the front end script by type "stop" in the terminal. Use the following command to stop the backend Spring application.
 docker-compose down
 
-#How to run tests
+# How to run tests
 Backend spring boot application has integration test file in the test folder. You can run the test
 by using IDE.
 The test for the frontend python script can run by the following command.
