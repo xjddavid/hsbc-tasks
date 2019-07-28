@@ -18,23 +18,6 @@ Examples:
 ·         tasks done 3
 
 # Architecture
-├── app
-│   ├── Dockerfile
-│   ├── pom.xml
-│   ├── src
-│   ├── target
-│   └── wait-for-it.sh
-├── data
-│   ├── mysql
-│   └── setup.sql
-├── docker-compose.yml
-├── nginx
-│   └── conf.d
-├── operation.log
-├── python
-│   ├── ternimal_input.py
-│   └── tests.py
-├── README.md
 Folder app contains all the codes of backend springboot application. It provides the function
 of create, update, delete, retrieve tasks in a restful style.
 Folder data records the mysql database data in data/mysql path. setup.sql file create the hsbc 
