@@ -35,4 +35,4 @@ services:
     depends_on:
       - nginx
       - mysql
-    command: mvn clean spring-boot:run -Dspring-boot.run.profiles=docker
+    command: ./wait-for-it.sh mysql:3306 -- mvn clean spring-boot:run -Dspring-boot.run.profiles=docker
