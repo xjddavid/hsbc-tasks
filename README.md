@@ -31,21 +31,22 @@ You need have docker and python installed in your system.
 # Start Application
 1. clone the repo and cd repo folder
 
-2. Using docker-compose to start the backend spring application. Type the following command in the terminal. It might take some time to download the docker images and java dependencies. You can have a coffee break.
-docker-compose up
+2. Using docker-compose to start the backend spring application. Type the following command in the terminal. It might take some time to download the docker images and java dependencies. You can have a coffee break. 
+`docker-compose up`
 
 3. Open another terminal window. Use python(python3) to run front end. All the input is from terminal
-python3 python/terminal_input.py
+`python3 python/terminal_input.py`
 
 4. Type inputs in the same terminal. 
 
 5. All the operation and console output will be logged in the operation.log file.
 
-6. You can stop the front end script by type "stop" in the terminal. Use the following command to stop the backend Spring application.
-docker-compose down
+6. You can stop the front end script by type "stop" in the terminal. 
+Use the following command to stop the backend Spring application. 
+`docker-compose down`
 
 # How to run tests
 Backend spring boot application has integration test file in the test folder. You can run the test
 by using IDE.
 The test for the frontend python script can run by the following command.
-python3 python/tests.py
+`python3 python/tests.py`
