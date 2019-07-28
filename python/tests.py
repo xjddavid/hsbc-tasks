@@ -5,19 +5,39 @@ from ternimal_input import *
 import json
 
 
+ERROR_CODE = 404
+
+
+class MockResponse:
+    def __init__(self, text, status_code):
+        self.text = text
+        self.status_code = status_code
+
 # This method will be used by the mock to replace requests.get
 def mocked_requests_get(*args, **kwargs):
-    class MockResponse:
-        def __init__(self, text, status_code):
-            self.text = text
-            self.status_code = status_code
-
     if kwargs["url"] == URL:
-        return MockResponse(json.dumps([{"key1": "value1"}]), 200)
+        return MockResponse(json.dumps([{"key1": "value1"}]), SUCCESS_CODE)
     elif kwargs["url"] == URL + "?from=11111987&to=12111987":
-        return MockResponse(json.dumps([{"key2": "value2"}]), 200)
+        return MockResponse(json.dumps([{"key2": "value2"}]), SUCCESS_CODE)
 
-    return MockResponse("Oops", 404)
+    return MockResponse("Oops", ERROR_CODE)
+
+
+# This method will be used by the mock to replace requests.delete
+def mocked_requests_delete(*args, **kwargs):
+    if kwargs["url"] == URL+"/1":
+        return MockResponse(None, SUCCESS_CODE)
+
+    return MockResponse("Oops", ERROR_CODE)
+
+
+# This method will be used by the mock to replace requests.patch
+def mocked_requests_patch(*args, **kwargs):
+    if kwargs["url"] == URL+"/1" and kwargs["json"] == {'status': 'DONE'}:
+        return MockResponse(json.dumps({"key1": "value1"}), SUCCESS_CODE)
+
+    return MockResponse("Oops", ERROR_CODE)
+
 
 
 class Tests(TestCase):
@@ -68,5 +88,22 @@ class Tests(TestCase):
         # error response status code
         self.assertEqual(parse_input("tasks list --expiring-11/11/1988"), "Oops")
 
+    @mock.patch('requests.delete',side_effect=mocked_requests_delete )
+    def test_parse_input_delete_request(self, mock_delete):
+        # invalid query
+        self.assertEqual(parse_input("tasks delete hehe haha"), "Invalid input, delete operation should provide only task id.")
+        # valid query
+        self.assertEqual(parse_input("tasks delete 1"), "Delete operation success.")
+        # error response status code
+        self.assertEqual(parse_input("tasks delete 2"), "Oops")
+
+    @mock.patch('requests.patch',side_effect=mocked_requests_patch )
+    def test_parse_input_patch_request(self, mock_patch):
+        # invalid query
+        self.assertEqual(parse_input("tasks done hehe haha"), "Invalid input, done operation should provide only task id.")
+        # valid query
+        self.assertEqual(parse_input("tasks done 1"), '{"key1": "value1"}')
+        # error response status code
+        self.assertEqual(parse_input("tasks done 2"), "Oops")
 
 main()

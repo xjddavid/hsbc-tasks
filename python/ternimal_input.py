@@ -82,16 +82,16 @@ def parse_input(s):
 
     if words[1] == "done":
         if len(words[2:]) != 1:
-            return ERROR, "Invalid input, done operation should provide only task id."
+            return "Invalid input, done operation should provide only task id."
         response = requests.patch(url=URL + "/" + words[2], json={"status": "DONE"})
         return response.text
 
     if words[1] == "delete":
         if len(words[2:]) != 1:
-            return ERROR, "Invalid input, delete operation should provide only task id."
+            return "Invalid input, delete operation should provide only task id."
         response = requests.delete(url=URL + "/" + words[2])
         if response.status_code == SUCCESS_CODE:
-            return "Delete operation success "
+            return "Delete operation success."
         return response.text
 
     if words[1] == "list":
