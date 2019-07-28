@@ -1,4 +1,4 @@
-package com.jiang.tasks.dto;
+package com.jiang.tasks.enums;
 
 public enum Status {
     CREATED("CREATED"), DONE("DONE"), DELETED("DELETED");

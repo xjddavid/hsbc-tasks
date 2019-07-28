@@ -1,6 +1,7 @@
 package com.jiang.tasks.dto;
 
 import com.jiang.tasks.Utils;
+import com.jiang.tasks.enums.Status;
 import com.jiang.tasks.exceptions.StatusException;
 import lombok.Data;
 import lombok.NoArgsConstructor;

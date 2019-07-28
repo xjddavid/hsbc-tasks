@@ -3,6 +3,7 @@ package com.jiang.tasks.service;
 import com.jiang.tasks.Utils;
 import com.jiang.tasks.domain.Task;
 import com.jiang.tasks.dto.*;
+import com.jiang.tasks.enums.Status;
 import com.jiang.tasks.exceptions.EmptyPatchParamException;
 import com.jiang.tasks.exceptions.StatusException;
 import com.jiang.tasks.exceptions.TaskNotFoundException;
