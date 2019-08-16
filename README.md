@@ -47,6 +47,6 @@ Use the following command to stop the backend Spring application.
 
 # How to run tests
 Backend spring boot application has integration test file in the test folder. You can run the test
-by using IDE.
+by using IDE or use maven by typing `mvn test`
 The test for the frontend python script can run by the following command.
 `python3 python/tests.py`
